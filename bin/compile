@@ -68,8 +68,6 @@ install_sonarqube() {
   
   chmod +x ${SONAR_HOME}/elasticsearch/bin/*
   
-  mkdir -p /reports/pmd
-  
   if [ "${PIPESTATUS[*]}" != "0" ]; then
     echo " !     Failed to install Sonar"
     exit 1
