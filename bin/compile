@@ -104,7 +104,7 @@ install_pmd() {
   jar xvf ${CACHE_DIR}/${PMD_DIST_ZIP} >/dev/null
   mv ${PMD_DIST} ${PMD_HOME}
 
-  #chmod +x ${PMD_HOME}/bin/*
+  chmod +x ${PMD_HOME}/bin/*
 
   if [ "${PIPESTATUS[*]}" != "0" ]; then
     echo " !     Failed to install PMD"
