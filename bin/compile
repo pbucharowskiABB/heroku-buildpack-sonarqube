@@ -10,7 +10,7 @@ CACHE_DIR=$2
 
 BP_DIR=`cd $(dirname $0); cd ..; pwd`
 
-SONAR_VERSION="6.3.1"
+SONAR_VERSION="7.7"
 CODESCAN_VERSION="4.0.5"
 ANT_VERSION="1.9.9"
 SONAR_HOME=${BUILD_DIR}/sonarqube
@@ -41,7 +41,7 @@ install_sonarqube() {
 
   # Download Sonar if not in cache
   if [ ! -f ${CACHE_DIR}/${SONAR_DIST_ZIP} ]; then
-    SONAR_URL="http://downloads.code-scan.com/bundler/${SONAR_DIST_ZIP}"
+    SONAR_URL="https://binaries.sonarsource.com/Distribution/sonarqube/${SONAR_DIST_ZIP}"
     echo -n "-----> Downloading ${SONAR_DIST}....."
     curl --silent --location ${SONAR_URL} > ${CACHE_DIR}/${SONAR_DIST_ZIP}
     echo " done"
@@ -155,7 +155,7 @@ install_ant() {
 
 install_jdk ${BUILD_DIR}
 install_sonarqube ${BUILD_DIR} ${CACHE_DIR}
-install_codescan ${BUILD_DIR} ${CACHE_DIR}
-install_ant ${BUILD_DIR} ${CACHE_DIR}
+#install_codescan ${BUILD_DIR} ${CACHE_DIR}
+#install_ant ${BUILD_DIR} ${CACHE_DIR}
 
 
