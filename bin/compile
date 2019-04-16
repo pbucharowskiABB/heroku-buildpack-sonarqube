@@ -11,9 +11,11 @@ CACHE_DIR=$2
 BP_DIR=`cd $(dirname $0); cd ..; pwd`
 
 SONAR_VERSION="7.7"
+PMD_VERSION="6.13.0"
 CODESCAN_VERSION="4.0.5"
 ANT_VERSION="1.9.9"
 SONAR_HOME=${BUILD_DIR}/sonarqube
+
 
 install_jdk() {
   local install_dir=${1}
@@ -75,6 +77,41 @@ install_sonarqube() {
   echo " done"
 }
 
+install_pmd() {
+  local BUILD_DIR=${1}
+  local CACHE_DIR=${2}
+
+  PMD_DIST="pmd-bin-${PMD_VERSION}"
+  PMD_DIST_ZIP="${PMD_DIST}.zip"
+  PMD_HOME=${BUILD_DIR}/pmd
+
+  if [ ! -d ${CACHE_DIR} ]; then
+    mkdir -p ${CACHE_DIR}
+  fi
+
+  # Download PMD if not in cache
+  if [ ! -f ${CACHE_DIR}/${PMD_DIST_ZIP} ]; then
+    PMD_URL="https://github.com/pmd/pmd/releases/download/pmd_releases%2F6.13.0/${PMD_DIST_ZIP}"
+    echo -n "-----> Downloading ${PMD_DIST}....."
+    curl --silent --location ${PMD_URL} > ${CACHE_DIR}/${PMD_DIST_ZIP}
+    echo " done"
+  fi
+
+  echo -n "-----> Installing ${PMD_DIST}...."
+
+  cd ${BUILD_DIR}
+
+  jar xvf ${CACHE_DIR}/${PMD_DIST_ZIP} >/dev/null
+  mv ${PMD_DIST} ${PMD_HOME}
+
+  #chmod +x ${PMD_HOME}/bin/*
+
+  if [ "${PIPESTATUS[*]}" != "0" ]; then
+    echo " !     Failed to install PMD"
+    exit 1
+  fi
+  echo " done"
+}
 
 install_codescan() {
   local BUILD_DIR=${1}
@@ -157,6 +194,7 @@ install_ant() {
 
 install_jdk ${BUILD_DIR}
 install_sonarqube ${BUILD_DIR} ${CACHE_DIR}
+install_pmd ${BUILD_DIR} ${CACHE_DIR}
 #install_codescan ${BUILD_DIR} ${CACHE_DIR}
 #install_ant ${BUILD_DIR} ${CACHE_DIR}
 
